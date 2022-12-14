@@ -1,0 +1,57 @@
+/**
+ * Created by robertwright on 12/14/22.
+ */
+
+:host {
+    --brand-color : var(--lwc-brandAccessible,rgb(1, 118, 211));
+}
+
+td {
+    padding: 10px !important;
+    font-size: 1rem !important;
+}
+
+.slds-datepicker tbody>tr>td.is-selectable>.slds-day {
+    background: rgba(1, 118, 211,0.10);
+    color: rgb(1, 118, 211);
+    font-weight: bolder;
+}
+.slds-datepicker tbody>tr>td:hover.is-selectable>.slds-day {
+    background: rgba(1, 118, 211,0.20);
+}
+
+.slds-day {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    min-width: 2.5rem !important;
+    line-height: 2.5rem !important;
+}
+
+.slds-visual-picker+.slds-visual-picker {
+    margin-left: 0;
+}
+
+.dateSelectors {
+    width: 275px;
+}
+
+.slds-visual-picker__figure {
+    border: 1px solid rgb(1, 118, 211);
+}
+
+.selectorsOverflow {
+    overflow: scroll;
+    max-height: 500px;
+}
+
+.disabledSelector .slds-visual-picker__figure {
+    background-color: var(--lwc-brandDisabled,rgb(201, 199, 197));
+}
+
+.disabledSelector .slds-visual-picker__text-check {
+    color: var(--lwc-brandDisabled,rgb(201, 199, 197));
+}
+
+.slds-visual-picker__text-check {
+    color: #ffffff;
+}

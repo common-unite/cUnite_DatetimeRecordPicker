@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <description>Pass in a collection of records with start datetimes. This component provides a date picker for records</description>
+    <isExposed>true</isExposed>
+    <masterLabel>Form (Date Picker)</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <propertyType name="T" extends="SObject" label="Record Type" description="Select the SObject type for the records being passed into the picker"/>
+
+            <property name="prefillRecords" type="{T[]}" label="1: Records" required="true" role="inputOnly" description="Pass in a collection of records that include a Datetime"/>
+            <property name="startDateTimeFieldName" type="String" label="2: Datetime | FieldApiName" role="inputOnly" required="true" description="This must be a FieldApiName for a DateTime field on the related object. The values within this field are used to group records into their date and time selectors"/>
+            <property name="selectorLabelFieldName" type="String" label="3: Selector Label | FieldApiName" role="inputOnly" required="true" description="This must be a FieldApiName on the related object. This value is used as the label for the time selectors. Note: This can be a formula field"/>
+            <property name="maxSelection" type="Integer" label="4: Maximum Selection" role="inputOnly" default="5" required="true" description="This defines the maximum number of records that a User can select within the picker"/>
+            <property name="label" type="String" label="5: Label" role="inputOnly" default="Select a Date and Time" description="Provide a label for the Date and Time Picker"/>
+            <property name="required" type="Boolean" label="6: Required" role="inputOnly" default="false"/>
+
+            <property name="selectedRecords" type="{T[]}" label="Selected Record(s) Collection" role="outputOnly" description="Returns a collection of selected records"/>
+            <property name="selectedRecordIds" type="String[]" label="Selected Id(s) Collection" role="outputOnly" description="Returns a collection of selected record Ids"/>
+            <property name="selectedRecordDates" type="DateTime[]" label="Selected DateTime(s) Collection" role="outputOnly" description="Returns a collection of selected datetime values"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
