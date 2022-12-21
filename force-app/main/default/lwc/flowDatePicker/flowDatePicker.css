@@ -55,3 +55,7 @@ td {
 .slds-visual-picker__text-check {
     color: #ffffff;
 }
+
+.visual-date-picker {
+    min-height: 35px;
+}

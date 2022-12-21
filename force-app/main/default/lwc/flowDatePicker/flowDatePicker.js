@@ -267,7 +267,7 @@ export default class FlowDatePicker extends LightningElement {
         const disableNonSelected = this.maxSelection > 1 && (this.currentSelectedRecords || []).length >= (this.maxSelection || 1);
         this.currentVisibleRecords = (this.recordMap.get(tempDate) || []).map(record => {
 
-            record._class = `slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center ${record[this.themeFieldName]}`;
+            record._class = `slds-visual-picker__figure slds-visual-picker__text visual-date-picker slds-align_absolute-center ${record[this.themeFieldName]}`;
 
             const recordIsDisabled = record[this.disabledFieldName] || false;
             if (recordIsDisabled || (disableNonSelected && !record._selected)) {
