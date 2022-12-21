@@ -2,7 +2,7 @@
  * Created by robertwright on 12/14/22.
  */
 
-import {LightningElement,api,track} from 'lwc';
+import {LightningElement,api} from 'lwc';
 import {FlowAttributeChangeEvent} from 'lightning/flowSupport';
 Date.prototype.addDays = function(days) {
     let date = new Date(this.valueOf());
@@ -22,24 +22,72 @@ export default class FlowDatePicker extends LightningElement {
             };
         }
     }
-
     @api isExtension = false;
 
     /**Input Only**/
     @api maxSelection = 5;
-    @api startDateTimeFieldName;
-    @api selectorLabelFieldName;
+
+    @api startDateTimeFieldName /**Must be datetime field**/;
+    @api selectorLabelFieldName /**Must be a text, richtext or textarea field**/;
+    @api disabledFieldName; /**Must be a boolean field**/
+    @api themeFieldName; /**Must be a String field**/
+
     @api label = 'Select a Date and Time';
     @api required = false;
+    @api hideCalendarOnSelection = false;
+
+    @api get selectedStartDate() {
+        return this.currentSelectedDate;
+    } set selectedStartDate(value) {
+        const date = (value) ? new Date(value) : null;
+        if(date) this.currentSelectedDate = new Date(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate());
+        else this.currentSelectedDate = null;
+    }
 
     /**Input/Output**/
-    @api prefillRecords = [];
-    @track records;
+    @api get prefillRecords() {
+        return this.records;
+    }
+    set prefillRecords(value) {
+        if(this.isConnected) this.resetComponent(value);
+        else this.records = value || [];
+    }
+    records;
 
     /**Output Only**/
-    @api selectedRecords;
+    resetSelectedRecords() {
+        const value = this.selectedRecords || [];
+
+        const selectedRecordIds = new Set();
+        const size = ((this.maxSelection || 1) <= (value || []).length) ? this.maxSelection || 1 : (value || []).length;
+        for(let itr = 0; itr < size; itr++) {
+            selectedRecordIds.add(value[itr].Id);
+        }
+
+        (this.records || [])
+            .filter(record => record.Id && (selectedRecordIds.has(record.Id) || record._selected === true))
+            .forEach(record => {
+                const disabled = (record[this.disabledFieldName]) ? record[this.disabledFieldName] : false;
+                if(selectedRecordIds.has(record.Id) && !disabled) record._selected = true;
+                else if(record._selected) delete record._selected;
+            });
+
+        this.resetCurrentVisibleRecords();
+    }
+    @api get selectedRecords() {
+        return this._selectedRecords;
+    };
+    set selectedRecords(value) {
+        this._selectedRecords = value || [];
+        if(this.isConnected) {
+            this.resetSelectedRecords();
+        }
+    }
+    _selectedRecords;
+
     @api selectedRecordIds;
     @api selectedRecordDates;
+    @api firstSelectedRecord;
 
     monthMap = {
         0: 'January',
@@ -72,22 +120,41 @@ export default class FlowDatePicker extends LightningElement {
         [{}, {}, {}, {}, {}, {}, {}]
     ];
 
-    @track currentMonth;
-    @track currentYear;
-    @track currentSelectedDate;
-    @track recordMap = new Map();
-    @track currentVisibleRecords;
+    currentMonth;
+    currentYear;
+    currentSelectedDate;
+    recordMap = new Map();
+    currentVisibleRecords;
+    _hideCalender = false;
 
-    connectedCallback() {
-        this.currentYear = new Date().getFullYear();
-        this.currentMonth = new Date().getMonth();
+    get showReturnArrow() {
+        return this._hideCalender;
+    }
 
-        this.records = (this.prefillRecords || []).map(record => {
-            return {_selectorLabel: record[this.selectorLabelFieldName], ...record};
-        });
+    connected = false;
+    resetComponent(records) {
+        const firstRecord = ((records || []).length > 0) ? records[0] : null;
+        const firstDate = (firstRecord) ? new Date(firstRecord[this.startDateTimeFieldName]) : new Date();
+
+        const calendarStartDate = (firstDate > this.selectedStartDate) ? firstDate : this.selectedStartDate;
+
+        this.currentYear = calendarStartDate.getFullYear();
+        this.currentMonth = calendarStartDate.getMonth();
+
+        this.records = (records || [])
+            .filter(record => record[this.startDateTimeFieldName] && record[this.selectorLabelFieldName])
+            .map(record => {
+                return {_selectorLabel: record[this.selectorLabelFieldName], ...record};
+            });
 
         this.resetRecordMap();
+        this.resetSelectedRecords();
         this.resetCalendarRows();
+        this.resetCurrentVisibleRecords();
+    }
+    connectedCallback() {
+        this.connected = true;
+        this.resetComponent(this.prefillRecords);
     }
 
     get currentSelectedRecords() {
@@ -145,11 +212,11 @@ export default class FlowDatePicker extends LightningElement {
         const selectionsDatesSet = new Set(this.currentSelectedRecordDates);
 
         const calendarRows = [
-            {calenderColumns: [{}, {}, {}, {}, {}, {}, {}], key: 1},
+            {calenderColumns: [{disabled:true}, {disabled:true}, {disabled:true}, {disabled:true}, {disabled:true}, {disabled:true}, {disabled:true}], key: 1},
             {calenderColumns: [{}, {}, {}, {}, {}, {}, {}], key: 2},
             {calenderColumns: [{}, {}, {}, {}, {}, {}, {}], key: 3},
             {calenderColumns: [{}, {}, {}, {}, {}, {}, {}], key: 4},
-            {calenderColumns: [{}, {}, {}, {}, {}, {}, {}], key: 5}
+            {calenderColumns: [{disabled:true}, {disabled:true}, {disabled:true}, {disabled:true}, {disabled:true}, {disabled:true}, {disabled:true}], key: 5}
         ];
 
         let day = 1;
@@ -163,6 +230,7 @@ export default class FlowDatePicker extends LightningElement {
                 rowColumn.day = day;
                 rowColumn.date = currentDate.setHours(0, 0, 0, 0);
                 if (this.recordMap.has(currentDate.setHours(0, 0, 0, 0))) {
+                    if(rowColumn.disabled) delete rowColumn.disabled;
                     rowColumn.tabIndex = 0;
                     rowColumn.class = ((currentSelectedDate && currentSelectedDate === rowColumn.date) || selectionsDatesSet.has(rowColumn.date)) ? 'slds-is-selected' : 'is-selectable';
                 } else rowColumn.disabled = true;
@@ -192,10 +260,17 @@ export default class FlowDatePicker extends LightningElement {
     }
 
     resetCurrentVisibleRecords() {
+        if(!this.currentSelectedDate) return;
+        if(this.hideCalendarOnSelection) this._hideCalender = true;
+
         const tempDate = new Date(this.currentSelectedDate).setHours(0, 0, 0, 0);
-        const disableNonSelected = (this.currentSelectedRecords || []).length >= (this.maxSelection || 1);
+        const disableNonSelected = this.maxSelection > 1 && (this.currentSelectedRecords || []).length >= (this.maxSelection || 1);
         this.currentVisibleRecords = (this.recordMap.get(tempDate) || []).map(record => {
-            if (disableNonSelected && !record._selected) {
+
+            record._class = `slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center ${record[this.themeFieldName]}`;
+
+            const recordIsDisabled = record[this.disabledFieldName] || false;
+            if (recordIsDisabled || (disableNonSelected && !record._selected)) {
                 record._disabled = true;
             } else if (record._disabled) delete record._disabled;
             return record;
@@ -219,13 +294,14 @@ export default class FlowDatePicker extends LightningElement {
     }
 
     handleSelectDate(event) {
-        if (event.currentTarget.dataset.disabled === "true") {
+        if (event.currentTarget.dataset.disabled === 'true') {
             return;
         }
         const currentDate = event.currentTarget.dataset.dateValue;
         this.currentSelectedDate = new Date(Number(currentDate));
         this.resetCurrentVisibleRecords();
         this.resetCalendarRows();
+        if(this.hideCalendarOnSelection) this._hideCalender = true;
     }
 
     handleSelectTime(event) {
@@ -236,10 +312,16 @@ export default class FlowDatePicker extends LightningElement {
         const recordId = event.currentTarget.value;
         const relatedRecord = this.records.find(record => record.Id === recordId);
 
+        if((this.firstSelectedRecord || {}).Id === relatedRecord.Id && this.required && this.maxSelection === 1) return;
+
         if (relatedRecord._selected) delete relatedRecord._selected;
         else relatedRecord._selected = true;
 
-        this.resetCurrentVisibleRecords();
+        if(relatedRecord._selected === true && this.maxSelection === 1) {
+            this.records.filter(record => record.Id !== relatedRecord.Id && record._selected === true)
+                .forEach(record => delete record._selected);
+        }
+
         this.dispatchOutputEvents();
     }
 
@@ -247,6 +329,10 @@ export default class FlowDatePicker extends LightningElement {
         const selectedRecords = this.records.filter(record => record._selected === true);
         const selectedRecordIds = new Set((selectedRecords || []).map(record => record.Id));
         const selectedRecordDates = new Set((selectedRecords || []).map(record => record[[this.startDateTimeFieldName]]));
+        const firstSelectedRecord = ((selectedRecords || []).length > 0) ? selectedRecords[0] : null;
+
+        const firstSelectedRecordChangeEvent = (this.isExtension) ? new CustomEvent('firstselectedrecordchange', {detail: firstSelectedRecord}) : new FlowAttributeChangeEvent('firstSelectedRecord', firstSelectedRecord);
+        this.dispatchEvent(firstSelectedRecordChangeEvent);
 
         const selectedRecordsChangeEvent = (this.isExtension) ? new CustomEvent('selectedrecordschange', {detail: selectedRecords}) : new FlowAttributeChangeEvent('selectedRecords', selectedRecords);
         this.dispatchEvent(selectedRecordsChangeEvent);
@@ -256,5 +342,10 @@ export default class FlowDatePicker extends LightningElement {
 
         const selectedRecordDatesChangeEvent = (this.isExtension) ? new CustomEvent('selectedrecorddateschange', {detail: [...selectedRecordDates]}) : new FlowAttributeChangeEvent('selectedRecordDates', [...selectedRecordDates]);
         this.dispatchEvent(selectedRecordDatesChangeEvent);
+    }
+
+    handleCloseTimeSelector(event) {
+        this._hideCalender = false;
+        this.currentVisibleRecords = null;
     }
 }

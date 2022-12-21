@@ -14,13 +14,20 @@
             <property name="prefillRecords" type="{T[]}" label="1: Records" required="true" role="inputOnly" description="Pass in a collection of records that include a Datetime"/>
             <property name="startDateTimeFieldName" type="String" label="2: Datetime | FieldApiName" role="inputOnly" required="true" description="This must be a FieldApiName for a DateTime field on the related object. The values within this field are used to group records into their date and time selectors"/>
             <property name="selectorLabelFieldName" type="String" label="3: Selector Label | FieldApiName" role="inputOnly" required="true" description="This must be a FieldApiName on the related object. This value is used as the label for the time selectors. Note: This can be a formula field"/>
+
             <property name="maxSelection" type="Integer" label="4: Maximum Selection" role="inputOnly" default="5" required="true" description="This defines the maximum number of records that a User can select within the picker"/>
             <property name="label" type="String" label="5: Label" role="inputOnly" default="Select a Date and Time" description="Provide a label for the Date and Time Picker"/>
             <property name="required" type="Boolean" label="6: Required" role="inputOnly" default="false"/>
 
-            <property name="selectedRecords" type="{T[]}" label="Selected Record(s) Collection" role="outputOnly" description="Returns a collection of selected records"/>
+            <property name="disabledFieldName" type="String" label="7: Disabled | FieldApiName" role="inputOnly" description="Pass in the FieldApiName of a boolean field. When true the record cannot be selected."/>
+            <property name="themeFieldName" type="String" label="8: Theme | FieldApiName" role="inputOnly" description="Pass in the FieldApiName of a string field that contains a custom CSS class name."/>
+            <property name="selectedStartDate" type="Date" label="Selected Start Date" role="inputOnly" description="Preselect a start date"/>
+            <property name="hideCalendarOnSelection" type="Boolean" label="Hide Calendar on Selection" role="inputOnly" description="After a date is selected calendar is hidden from view"/>
+
+            <property name="selectedRecords" type="{T[]}" label="Selected Record(s) Collection" description="Returns a collection of selected records"/>
             <property name="selectedRecordIds" type="String[]" label="Selected Id(s) Collection" role="outputOnly" description="Returns a collection of selected record Ids"/>
             <property name="selectedRecordDates" type="DateTime[]" label="Selected DateTime(s) Collection" role="outputOnly" description="Returns a collection of selected datetime values"/>
+            <property name="firstSelectedRecord" type="{T}" label="First Selected Record" role="outputOnly" description="Returns the first selected record"/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

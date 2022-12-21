@@ -7,106 +7,125 @@
     <template if:true={records}>
         <lightning-layout multiple-rows class='slds-container_fluid'>
             <h2 aria-atomic="true" aria-live="assertive" class="slds-size_1-of-1 slds-text-heading_medium slds-m-bottom_small">{label}</h2>
-            <lightning-layout class="slds-size_1-of-1">
-                <lightning-layout-item flexibility="shrink">
-                    <div aria-hidden="false" aria-label="Date picker" class="slds-datepicker" role="dialog">
-                        <lightning-layout class="slds-datepicker__filter">
-                            <lightning-layout class="slds-datepicker__filter_month slds-container_fluid" horizontal-align=spread vertical-align=start>
-                                <h2 aria-atomic="true" aria-live="assertive" class="slds-align-middle slds-text-heading_small" id="defaultPicker-month">{currentMonthValue} {currentYear}</h2>
-                                <lightning-layout-item flexibility="shrink">
-                                    <lightning-layout>
-                                        <div class="slds-align-middle slds-p-around_x-small">
-                                            <lightning-button-icon
-                                                    disabled={disabledPreviousMonth}
-                                                    variant="bare"
-                                                    size="medium"
-                                                    icon-name="utility:left"
-                                                    alternative-text="Previous Month"
-                                                    title="Previous Month"
-                                                    onclick={handlePreviousMonth}>
-                                            </lightning-button-icon>
-                                        </div>
-                                        <div class="slds-align-middle slds-p-around_x-small">
-                                            <lightning-button-icon
-                                                    disabled={disabledNextMonth}
-                                                    variant="bare"
-                                                    size="medium"
-                                                    icon-name="utility:right"
-                                                    alternative-text="Next Month"
-                                                    title="Next Month"
-                                                    onclick={handleNextMonth}>
-                                            </lightning-button-icon>
-                                        </div>
-                                    </lightning-layout>
-                                </lightning-layout-item>
+            <lightning-layout multiple-rows class="slds-size_1-of-1">
+                <template if:false={_hideCalender}>
+                    <lightning-layout-item class="slds-m-bottom_small slds-p-right_small" flexibility="shrink">
+                        <div aria-hidden="false" aria-label="Date picker" class="slds-datepicker" role="dialog">
+                            <lightning-layout class="slds-datepicker__filter">
+                                <lightning-layout class="slds-datepicker__filter_month slds-container_fluid" horizontal-align=spread vertical-align=start>
+                                    <h2 aria-atomic="true" aria-live="assertive" class="slds-align-middle slds-text-heading_small" id="defaultPicker-month">{currentMonthValue} {currentYear}</h2>
+                                    <lightning-layout-item flexibility="shrink">
+                                        <lightning-layout>
+                                            <div class="slds-align-middle slds-p-around_x-small">
+                                                <lightning-button-icon
+                                                        disabled={disabledPreviousMonth}
+                                                        variant="bare"
+                                                        size="medium"
+                                                        icon-name="utility:left"
+                                                        alternative-text="Previous Month"
+                                                        title="Previous Month"
+                                                        onclick={handlePreviousMonth}>
+                                                </lightning-button-icon>
+                                            </div>
+                                            <div class="slds-align-middle slds-p-around_x-small">
+                                                <lightning-button-icon
+                                                        disabled={disabledNextMonth}
+                                                        variant="bare"
+                                                        size="medium"
+                                                        icon-name="utility:right"
+                                                        alternative-text="Next Month"
+                                                        title="Next Month"
+                                                        onclick={handleNextMonth}>
+                                                </lightning-button-icon>
+                                            </div>
+                                        </lightning-layout>
+                                    </lightning-layout-item>
+                                </lightning-layout>
                             </lightning-layout>
-                        </lightning-layout>
-                        <!--Calendar Start-->
-                        <table aria-labelledby="defaultPicker-month" aria-multiselectable="true" class="slds-datepicker__month" role="grid">
-                            <thead>
-                            <tr id="defaultPicker-weekdays">
-                                <th id="defaultPicker-Sunday" scope="col">
-                                    <abbr title="Sunday">Sun</abbr>
-                                </th>
-                                <th id="defaultPicker-Monday" scope="col">
-                                    <abbr title="Monday">Mon</abbr>
-                                </th>
-                                <th id="defaultPicker-Tuesday" scope="col">
-                                    <abbr title="Tuesday">Tue</abbr>
-                                </th>
-                                <th id="defaultPicker-Wednesday" scope="col">
-                                    <abbr title="Wednesday">Wed</abbr>
-                                </th>
-                                <th id="defaultPicker-Thursday" scope="col">
-                                    <abbr title="Thursday">Thu</abbr>
-                                </th>
-                                <th id="defaultPicker-Friday" scope="col">
-                                    <abbr title="Friday">Fri</abbr>
-                                </th>
-                                <th id="defaultPicker-Saturday" scope="col">
-                                    <abbr title="Saturday">Sat</abbr>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <template for:each={calendarRows} for:item="row">
-                                <tr key={row.key}>
-                                    <template for:each={row.calenderColumns} for:item="column">
-                                        <td tabindex={column.tabIndex}
-                                            data-disabled={column.disabled}
-                                            data-date-value={column.date}
-                                            class={column.class}
-                                            key={column.day}
-                                            role="gridcell"
-                                            onclick={handleSelectDate}>
+                            <!--Calendar Start-->
+                            <table aria-labelledby="defaultPicker-month" aria-multiselectable="true" class="slds-datepicker__month" role="grid">
+                                <thead>
+                                <tr id="defaultPicker-weekdays">
+                                    <th id="defaultPicker-Sunday" scope="col">
+                                        <abbr title="Sunday">Sun</abbr>
+                                    </th>
+                                    <th id="defaultPicker-Monday" scope="col">
+                                        <abbr title="Monday">Mon</abbr>
+                                    </th>
+                                    <th id="defaultPicker-Tuesday" scope="col">
+                                        <abbr title="Tuesday">Tue</abbr>
+                                    </th>
+                                    <th id="defaultPicker-Wednesday" scope="col">
+                                        <abbr title="Wednesday">Wed</abbr>
+                                    </th>
+                                    <th id="defaultPicker-Thursday" scope="col">
+                                        <abbr title="Thursday">Thu</abbr>
+                                    </th>
+                                    <th id="defaultPicker-Friday" scope="col">
+                                        <abbr title="Friday">Fri</abbr>
+                                    </th>
+                                    <th id="defaultPicker-Saturday" scope="col">
+                                        <abbr title="Saturday">Sat</abbr>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <template for:each={calendarRows} for:item="row">
+                                    <tr key={row.key}>
+                                        <template for:each={row.calenderColumns} for:item="column">
+                                            <td data-disabled={column.disabled}
+                                                tabindex={column.tabIndex}
+                                                data-date-value={column.date}
+                                                class={column.class}
+                                                key={column.day}
+                                                role="gridcell"
+                                                onclick={handleSelectDate}>
                                             <span class="slds-day">
                                                 {column.day}
                                             </span>
-                                        </td>
-                                    </template>
-                                </tr>
-                            </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </lightning-layout-item>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </lightning-layout-item>
+                </template>
                 <template if:true={currentVisibleRecords}>
-                    <lightning-layout-item class="slds-container_fluid slds-p-horizontal_small dateSelectors">
-                        <fieldset class="slds-form-element slds-p-horizontal_medium">
-                            <legend class="slds-form-element__legend slds-form-element__label slds-text-heading_small slds-m-bottom_x-small">{currentSelectedDateValue}</legend>
+                    <lightning-layout-item size=12 large-device-size=5 medium-device-size=12 small-device-size=12 >
+                        <fieldset class="slds-form-element">
+                            <legend class="slds-form-element__legend slds-form-element__label slds-text-heading_small slds-m-bottom_x-small">
+                                <lightning-layout vertical-align=center>
+                                    <template if:true={showReturnArrow}>
+                                        <lightning-layout-item flexibility="shrink" class="slds-p-right_medium">
+                                            <lightning-button-icon
+                                                    icon-name="utility:back"
+                                                    variant="bare"
+                                                    alternative-text="return"
+                                                    size="large"
+                                                    onclick={handleCloseTimeSelector}>
+                                            </lightning-button-icon>
+                                        </lightning-layout-item>
+                                    </template>
+                                    <lightning-layout-item >{currentSelectedDateValue}</lightning-layout-item>
+                                </lightning-layout>
+                            </legend>
                             <div class="slds-form-element__control selectorsOverflow">
                                 <template for:each={currentVisibleRecords} for:item="record">
                                     <div key={record.Id} class="slds-visual-picker slds-container_fluid slds-m-bottom_x-small">
                                         <input onclick={handleSelectTime} data-date-value={record._date} disabled={record._disabled} type="radio" id={record.Id} checked={record._selected} value={record.Id} name={record.Id} />
                                         <label for={record.Id}>
-                                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
-                                                  <span class="slds-p-around_small">
-                                                    <span class="slds-text-heading_small">{record._selectorLabel}</span>
+                                            <span class={record._class}>
+                                                  <span class="slds-p-around_xx-small slds-container_fluid">
+                                                        <lightning-formatted-rich-text class="slds-text-heading_small slds-container_fluid" value={record._selectorLabel}></lightning-formatted-rich-text>
                                                   </span>
-                                                </span>
-                                            <span class="slds-icon_container slds-visual-picker__text-check" >
+                                            </span>
+                                            <template if:true={record._selected}>
+                                                <span class="slds-icon_container slds-visual-picker__text-check" >
                                                     <lightning-icon class="slds-current-color" size="x-small" icon-name="utility:check"></lightning-icon>
                                                 </span>
+                                            </template>
                                         </label>
                                     </div>
                                 </template>
