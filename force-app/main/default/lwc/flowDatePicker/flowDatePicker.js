@@ -37,7 +37,7 @@ export default class FlowDatePicker extends LightningElement {
     @api hideCalendarOnSelection = false;
 
     @api get selectedStartDate() {
-        return this.currentSelectedDate;
+        return this.currentSelectedDate || new Date();
     } set selectedStartDate(value) {
         const date = (value) ? new Date(value) : null;
         if(date) this.currentSelectedDate = new Date(date.getUTCFullYear(),date.getUTCMonth(),date.getUTCDate());
