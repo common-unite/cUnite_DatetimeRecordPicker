@@ -146,7 +146,7 @@ export default class FlowDatePicker extends LightningElement {
         this.currentMonth = calendarStartDate.getMonth();
 
         this.records = (records || [])
-            .filter(record => record[this.startDateTimeFieldName] && record[this.selectorLabelFieldName])
+            .filter(record => record[this.startDateTimeFieldName])
             .map(record => {
                 return {_selectorLabel: record[this.selectorLabelFieldName], ...record};
             });
