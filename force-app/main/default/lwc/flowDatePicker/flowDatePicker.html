@@ -4,9 +4,14 @@
 
 <!-- Flow Date Picker -->
 <template>
-    <template if:true={records}>
+    <template if:true={showCalendar}>
         <lightning-layout multiple-rows class='slds-container_fluid'>
             <h2 aria-atomic="true" aria-live="assertive" class="slds-size_1-of-1 slds-text-heading_medium slds-m-bottom_small">{label}</h2>
+
+            <template if:true={subtext}>
+                <p class="slds-size_1-of-1 slds-m-vertical_small"><lightning-formatted-rich-text value={subtext}></lightning-formatted-rich-text></p>
+            </template>
+
             <lightning-layout multiple-rows class="slds-size_1-of-1">
                 <template if:false={_hideCalender}>
                     <lightning-layout-item class="slds-m-bottom_small slds-p-right_small" flexibility="shrink">

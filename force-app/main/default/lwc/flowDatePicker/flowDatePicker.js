@@ -33,6 +33,7 @@ export default class FlowDatePicker extends LightningElement {
     @api themeFieldName; /**Must be a String field**/
 
     @api label = 'Select a Date and Time';
+    @api subtext;
     @api required = false;
     @api hideCalendarOnSelection = false;
 
@@ -46,7 +47,7 @@ export default class FlowDatePicker extends LightningElement {
 
     /**Input/Output**/
     @api get prefillRecords() {
-        return this.records;
+        return this.records || [];
     }
     set prefillRecords(value) {
         if(this.isConnected) this.resetComponent(value);
@@ -126,6 +127,9 @@ export default class FlowDatePicker extends LightningElement {
     recordMap = new Map();
     currentVisibleRecords;
     _hideCalender = false;
+    get showCalender() {
+        return (this.records || []).length > 0;
+    }
 
     get showReturnArrow() {
         return this._hideCalender;
