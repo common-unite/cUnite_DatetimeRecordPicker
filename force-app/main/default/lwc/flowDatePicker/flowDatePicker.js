@@ -48,9 +48,8 @@ export default class FlowDatePicker extends LightningElement {
     /**Input/Output**/
     @api get prefillRecords() {
         return this.records || [];
-    }
-    set prefillRecords(value) {
-        if(this.isConnected) this.resetComponent(value);
+    } set prefillRecords(value) {
+        if(this.connected) this.resetComponent(value);
         else this.records = value || [];
     }
     records;
@@ -77,10 +76,9 @@ export default class FlowDatePicker extends LightningElement {
     }
     @api get selectedRecords() {
         return this._selectedRecords;
-    };
-    set selectedRecords(value) {
+    }; set selectedRecords(value) {
         this._selectedRecords = value || [];
-        if(this.isConnected) {
+        if(this.connected) {
             this.resetSelectedRecords();
         }
     }
@@ -127,7 +125,7 @@ export default class FlowDatePicker extends LightningElement {
     recordMap = new Map();
     currentVisibleRecords;
     _hideCalender = false;
-    get showCalender() {
+    get showCalendar() {
         return (this.records || []).length > 0;
     }
 
