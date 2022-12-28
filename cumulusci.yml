@@ -1,0 +1,25 @@
+minimum_cumulusci_version: '3.64.0'
+project:
+    name: cUnite_DateTimeRecordPicker
+    package:
+        name: "Flow Tool Kit: Datetime Picker"
+        namespace: FlowToolKit
+        api_version: '56.0'
+    git:
+    source_format: sfdx
+
+tasks:
+    robot:
+        options:
+            suites: robot/cUnite_DateTimeRecordPicker/tests
+            options:
+                outputdir: robot/cUnite_DateTimeRecordPicker/results
+
+    robot_testdoc:
+        options:
+            path: robot/cUnite_DateTimeRecordPicker/tests
+            output: robot/cUnite_DateTimeRecordPicker/doc/cUnite_DateTimeRecordPicker_tests.html
+
+    run_tests:
+        options:
+            required_org_code_coverage_percent: 75
