@@ -3,7 +3,8 @@
  */
 
 :host {
-    --brand-color : var(--lwc-brandAccessible,rgb(1, 118, 211));
+    --brand-color : var(--lwc-brandPrimary,rgb(1, 118, 211));
+    --brand-light : var(--lwc-brandPrimaryTransparent,rgba(1, 118, 211,0.10));
 }
 
 td {
@@ -12,19 +13,51 @@ td {
 }
 
 .slds-datepicker tbody>tr>td.is-selectable>.slds-day {
-    background: rgba(1, 118, 211,0.10);
-    color: rgb(1, 118, 211);
+    background: var(--brand-light,rgba(1, 118, 211,0.10));
+    color: var(--brand-color,rgb(1, 118, 211));
     font-weight: bolder;
 }
 .slds-datepicker tbody>tr>td:hover.is-selectable>.slds-day {
-    background: rgba(1, 118, 211,0.20);
+    background: var(--brand-light,rgba(1, 118, 211,0.20));
+}
+
+.slds-visual-picker__figure .slds-icon-action-check {
+    background-color: var(--brand-color,#1b96ff);
+}
+.slds-visual-picker input:checked ~ label .slds-visual-picker__text:after {
+    border-right-color: var(--brand-color,#1b96ff);
+    border-top-color: var(--brand-color,#1b96ff);
+}
+.slds-visual-picker input:checked ~ label .slds-visual-picker__text {
+    border: 1px solid var(--brand-color,#1b96ff);
+    -webkit-box-shadow: 0 0 0 1px var(--brand-color,#1b96ff) inset;
+    box-shadow: 0 0 0 1px var(--brand-color,#1b96ff) inset;
+}
+.slds-visual-picker input:checked ~ label .slds-visual-picker__icon {
+    background-color: var(--brand-color,#1b96ff);
+    border: 2px solid var(--brand-color,#1b96ff);
+}
+.slds-visual-picker input:focus ~ label .slds-visual-picker__figure {
+    border: 1px solid var(--brand-color,#1b96ff);
+    -webkit-box-shadow: 0 0 0 1px var(--brand-color,#1b96ff) inset;
+    box-shadow: 0 0 0 1px var(--brand-color,#1b96ff) inset;
+}
+.slds-visual-picker input:not(:disabled) ~ label:hover .slds-visual-picker__figure {
+    border: 1px solid var(--brand-color,#1b96ff);
+    -webkit-box-shadow: 0 0 0 1px var(--brand-color,#1b96ff) inset;
+    box-shadow: 0 0 0 1px var(--brand-color,#1b96ff) inset;
+}
+.slds-visual-picker:active .slds-visual-picker__figure {
+    border: 1px solid var(--brand-color,#1b96ff);
+    -webkit-box-shadow: 0 0 0 1px var(--brand-color,#1b96ff) inset;
+    box-shadow: 0 0 0 1px var(--brand-color,#1b96ff) inset;
 }
 
 .slds-day {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
-    min-width: 2.5rem !important;
-    line-height: 2.5rem !important;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-width: 2.5rem;
+    line-height: 2.5rem;
 }
 
 .slds-visual-picker+.slds-visual-picker {
@@ -36,7 +69,7 @@ td {
 }
 
 .slds-visual-picker__figure {
-    border: 1px solid rgb(1, 118, 211);
+    border: 1px solid rgba(0,0,0,0.1);
 }
 
 .selectorsOverflow {
