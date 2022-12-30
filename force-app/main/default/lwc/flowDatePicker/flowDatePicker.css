@@ -13,12 +13,12 @@ td {
 }
 
 .slds-datepicker tbody>tr>td.is-selectable>.slds-day {
-    background: var(--brand-light,rgba(1, 118, 211,0.10));
+    background: rgba(0, 0, 0, 0.05); /*var(--brand-light, rgba(0, 0, 0, 0.1));*/
     color: var(--brand-color,rgb(1, 118, 211));
     font-weight: bolder;
 }
 .slds-datepicker tbody>tr>td:hover.is-selectable>.slds-day {
-    background: var(--brand-light,rgba(1, 118, 211,0.20));
+    background: rgba(0, 0, 0, 0.1);/*var(--brand-light, rgba(0, 0, 0, 0.2));*/
 }
 
 .slds-visual-picker__figure .slds-icon-action-check {

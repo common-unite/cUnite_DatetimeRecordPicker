@@ -3,7 +3,7 @@
     <apiVersion>56.0</apiVersion>
     <description>Pass in a collection of records with start datetimes. This component provides a date picker for records</description>
     <isExposed>true</isExposed>
-    <masterLabel>Form (Date Picker)</masterLabel>
+    <masterLabel>Form (Date/Time Picker)</masterLabel>
     <targets>
         <target>lightning__FlowScreen</target>
     </targets>
