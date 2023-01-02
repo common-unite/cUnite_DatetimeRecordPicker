@@ -6,7 +6,7 @@
 <template>
     <template if:true={showCalendar}>
         <lightning-layout multiple-rows class='slds-container_fluid'>
-            <h2 aria-atomic="true" aria-live="assertive" class="slds-size_1-of-1 slds-text-heading_medium slds-m-bottom_small">{label}</h2>
+            <h2 aria-atomic="true" aria-live="assertive" class="slds-size_1-of-1 slds-text-heading_medium slds-m-bottom_small"><lightning-formatted-rich-text value={label}></lightning-formatted-rich-text></h2>
 
             <template if:true={subtext}>
                 <p class="slds-size_1-of-1 slds-m-bottom_small"><lightning-formatted-rich-text value={subtext}></lightning-formatted-rich-text></p>
